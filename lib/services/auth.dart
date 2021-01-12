@@ -9,7 +9,7 @@ class AuthService{
     return user != null ? UserData(uid: user.uid) : null;
   }
 
-  Future  signInEmailandPassword(String email, String password) async{
+  Future signInEmailandPassword(String email, String password) async{
     try{
        UserCredential userCredential = await _auth.signInWithEmailAndPassword(
           email: email, password: password

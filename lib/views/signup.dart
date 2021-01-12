@@ -102,19 +102,7 @@ class _SignUpState extends State<SignUp> {
                 onTap: (){
                   _signUp();
                 },
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 12),
-                  decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(30)
-                  ),
-                  alignment: Alignment.center,
-                  width: MediaQuery.of(context).size.width - 48,
-                  child: Text(
-                    "Sign Up",
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
-                ),
+                child: orangeButton(context, "Sign Up", MediaQuery.of(context).size.width - 48, Colors.deepOrangeAccent)
               ),
               SizedBox(height: 14),
               Row(

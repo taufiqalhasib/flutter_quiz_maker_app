@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_quiz_maker_app/helper/functions.dart';
 import 'package:flutter_quiz_maker_app/services/auth.dart';
 import 'package:flutter_quiz_maker_app/views/home.dart';
 import 'package:flutter_quiz_maker_app/views/signup.dart';
@@ -31,7 +32,7 @@ class _SignInState extends State<SignIn> {
           setState(() {
             _isLoading = false;
           });
-
+          HelperFunctions.saveUserLoggedInDetails(isLoggedIn: true);
           Navigator.pushReplacement(context, MaterialPageRoute(
               builder: (context) => Home())
           );
@@ -91,19 +92,7 @@ class _SignInState extends State<SignIn> {
                 onTap: (){
                   _signIn();
                 },
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 18),
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(30)
-                  ),
-                  alignment: Alignment.center,
-                  width: MediaQuery.of(context).size.width - 48,
-                  child: Text(
-                    "Sign In",
-                    style: TextStyle(color: Colors.white, fontSize: 16),
-                  ),
-                ),
+                child: orangeButton(context, "Sign In", MediaQuery.of(context).size.width - 48, Colors.deepOrangeAccent)
               ),
               SizedBox(height: 18),
               Row(
@@ -120,7 +109,7 @@ class _SignInState extends State<SignIn> {
                 ],
               ),
 
-              SizedBox(height: 80.0)
+              SizedBox(height: 60.0)
             ],
           ),
         ),
