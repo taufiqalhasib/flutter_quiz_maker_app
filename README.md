@@ -1,9 +1,13 @@
 # flutter_quiz_maker_app
 
-This is a quiz maker maker and quiz testing application using realtime database Firebase Firestore. The result is display instantly top of the quiz test screen according to the number of questions answered correctly by the user.
+A practice to make a flutter application.
+This is a quiz maker Application. Admin will add quiz test, after that user will attend the quiz test and give the test. The result will display instantly top of the quiz test screen according to the number of questions answered correctly by the user.
 
-## Screenshots
-![alt text](https://github.com/shriyashwarghade/QUIZ-APP-FLUTTER/blob/master/screenshot/Screenshot_1589297271.jpg) ![alt text](https://github.com/shriyashwarghade/QUIZ-APP-FLUTTER/blob/master/screenshot/Screenshot_1589297279.jpg) ![alt text](https://github.com/shriyashwarghade/QUIZ-APP-FLUTTER/blob/master/screenshot/Screenshot_1589297287.jpg) ![alt text](https://github.com/shriyashwarghade/QUIZ-APP-FLUTTER/blob/master/screenshot/Screenshot_1589297290.jpg)
+## Screenshots (User)
+![alt text](https://github.com/taufiqalhasib/flutter_quiz_maker_app/blob/master/screenshots/signin.jpg) ![alt text](https://github.com/taufiqalhasib/flutter_quiz_maker_app/blob/master/screenshots/signup.jpg) ![alt text](https://github.com/taufiqalhasib/flutter_quiz_maker_app/blob/master/screenshots/home.jpg) ![alt text](https://github.com/taufiqalhasib/flutter_quiz_maker_app/blob/master/screenshots/play_quiz.jpg) ![alt text](https://github.com/taufiqalhasib/flutter_quiz_maker_app/blob/master/screenshots/result_screen.jpg)
+
+## Screenshots (Admin)
+![alt text](https://github.com/taufiqalhasib/flutter_quiz_maker_app/blob/master/screenshots/home.jpg) ![alt text](https://github.com/taufiqalhasib/flutter_quiz_maker_app/blob/master/screenshots/add_quiz.jpg) ![alt text](https://github.com/taufiqalhasib/flutter_quiz_maker_app/blob/master/screenshots/add_question.jpg) ![alt text](https://github.com/taufiqalhasib/flutter_quiz_maker_app/blob/master/screenshots/all_question_set.jpg) ![alt text](https://github.com/taufiqalhasib/flutter_quiz_maker_app/blob/master/screenshots/update_question.jpg)
 
 ## Built With
 * [Flutter](https://flutter.dev/) - The Framework used.
