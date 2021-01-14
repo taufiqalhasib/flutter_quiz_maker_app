@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_quiz_maker_app/helper/functions.dart';
 import 'package:flutter_quiz_maker_app/services/auth.dart';
 import 'package:flutter_quiz_maker_app/views/home.dart';
 import 'package:flutter_quiz_maker_app/views/signin.dart';
@@ -25,13 +26,20 @@ class _SignUpState extends State<SignUp> {
         _isLoading = true;
       });
 
-      await _authService.signUpWithEmailandPassword(email, password).then((value){
+      Map<String, String> userData = {
+        "name" : name,
+        "email" : email,
+        "type" : "user",
+      };
+
+      await _authService.signUpWithEmailandPassword(email, password, userData).then((value){
         if(value != null){
 
           setState(() {
             _isLoading = false;
           });
 
+          HelperFunctions.saveUserLoggedInDetails(isLoggedIn: true);
           Navigator.pushReplacement(context, MaterialPageRoute(
               builder: (context) => Home())
           );
@@ -81,7 +89,7 @@ class _SignUpState extends State<SignUp> {
                   email = val;
                 },
                 validator: (val){
-                  return val.isEmpty ? "Enter email" : null;
+                    return validateEmail(email) ? null : "Enter correct email";
                 },
               ),
               SizedBox(height: 6),
@@ -94,7 +102,7 @@ class _SignUpState extends State<SignUp> {
                   password = val;
                 },
                 validator: (val){
-                  return val.isEmpty ? "Enter password" : null;
+                  return (val.length < 6) ? "Password length must be 6 characters" : null;
                 },
               ),
               SizedBox(height: 15),
@@ -126,4 +134,11 @@ class _SignUpState extends State<SignUp> {
       ),
     );
   }
+}
+
+bool validateEmail(String value) {
+  Pattern pattern =
+      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+  RegExp regex = new RegExp(pattern);
+  return (!regex.hasMatch(value)) ? false : true;
 }

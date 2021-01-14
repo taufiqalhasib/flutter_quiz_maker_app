@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quiz_maker_app/helper/functions.dart';
 import 'package:flutter_quiz_maker_app/views/home.dart';
-import 'package:flutter_quiz_maker_app/views/signin.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_quiz_maker_app/views/signin.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +28,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   checkUserLoggedInStatus() async{
-    HelperFunctions.getUserLoggedInDetails().then((value) => {
+    await HelperFunctions.getUserLoggedInDetails().then((value) => {
       setState((){
         _isLoggedIn = value;
       })

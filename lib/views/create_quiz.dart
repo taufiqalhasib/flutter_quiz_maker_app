@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quiz_maker_app/services/database.dart';
 import 'package:flutter_quiz_maker_app/views/add_question.dart';
+import 'package:flutter_quiz_maker_app/views/quiz_list.dart';
 import 'package:flutter_quiz_maker_app/widgets/widgets.dart';
 import 'package:random_string/random_string.dart';
 
@@ -45,8 +46,17 @@ class _CreateQuizState extends State<CreateQuiz> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: appBar(context),
+        actions: [
+          IconButton(
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => QuizList()));
+              },
+              icon: Icon(Icons.list_alt_sharp, color: Colors.black87,)
+          )
+        ],
         iconTheme: IconThemeData(color: Colors.black87),
         backgroundColor: Colors.transparent,
         elevation: 0.0,

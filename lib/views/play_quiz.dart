@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quiz_maker_app/models/question_model.dart';
 import 'package:flutter_quiz_maker_app/services/database.dart';
-import 'package:flutter_quiz_maker_app/views/home.dart';
 import 'package:flutter_quiz_maker_app/views/result.dart';
 import 'package:flutter_quiz_maker_app/widgets/quiz_play_widget.dart';
 import 'package:flutter_quiz_maker_app/widgets/widgets.dart';
@@ -21,12 +20,16 @@ int _correct = 0;
 int _incorrect = 0;
 int _notAttempted = 0;
 
+Stream infoStream;
+
 class _PlayQuizState extends State<PlayQuiz> {
 
   DatabaseService _databaseService = new DatabaseService();
   QuerySnapshot querySnapshot;
 
-  QuestionModel _getQuestionModelFromSnapshot(DocumentSnapshot questionSnapshot){
+  bool _isLoading = true;
+
+  QuestionModel getQuestionModelFromSnapshot(DocumentSnapshot questionSnapshot){
 
     QuestionModel questionModel = new QuestionModel();
     questionModel.question = questionSnapshot.data()["question"];
@@ -49,6 +52,7 @@ class _PlayQuizState extends State<PlayQuiz> {
     questionModel.correctAnswer = questionSnapshot.data()["correctAnswer"];
     questionModel.answered = false;
 
+    return questionModel;
   }
   
   @override
@@ -59,56 +63,74 @@ class _PlayQuizState extends State<PlayQuiz> {
       _correct = 0;
       _incorrect = 0;
       total = querySnapshot.docs.length;
+      _isLoading = false;
       setState(() {
 
       });
     });
-    print(widget.quizId);
+
+    if(infoStream == null){
+      infoStream = Stream<List<int>>.periodic(
+          Duration(milliseconds: 100), (x){
+
+        return [_correct, _incorrect] ;
+      });
+    }
     // TODO: implement initState
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    infoStream = null;
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: (){
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()));
-          },
-          icon: Icon(Icons.arrow_back, color: Colors.black,),
-        ),
         title: appBar(context),
         centerTitle: true,
         backgroundColor: Colors.transparent,
         elevation: 0.0,
-        // iconTheme: IconThemeData(
-        //   color: Colors.black54
-        // ),
         brightness: Brightness.light,
       ),
-      body: Container(
-        child: Column(
-          children: [
-            querySnapshot == null ? Container() :
-                ListView.builder(
-                  padding: EdgeInsets.symmetric(horizontal: 24),
-                  shrinkWrap: true,
-                  physics: ClampingScrollPhysics(),
-                  itemCount: querySnapshot.docs.length,
-                  itemBuilder: (context, index){
-                    return QuizPlayTile(
-                        questionModel: _getQuestionModelFromSnapshot(querySnapshot.docs[index]),
-                        index: index,
-                    );
-                  }
-                )
-          ],
+      body: _isLoading? Container(
+        child: Center(child: CircularProgressIndicator()),
+      ) :
+      SingleChildScrollView(
+        child: Container(
+          child: Column(
+            children: [
+              InfoHeader(
+                length: querySnapshot.docs.length,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              querySnapshot.docs == null ? Container(
+                child: Center(child: Text("No Question Available", style: TextStyle(fontSize: 18, color: Colors.red)),),
+              ) :
+                  ListView.builder(
+                    padding: EdgeInsets.symmetric(horizontal: 24),
+                    shrinkWrap: true,
+                    physics: ClampingScrollPhysics(),
+                    itemCount: querySnapshot.docs.length,
+                    itemBuilder: (context, index){
+                      return QuizPlayTile(
+                          questionModel: getQuestionModelFromSnapshot(querySnapshot.docs[index]),
+                          index: index,
+                      );
+                    }
+                  )
+            ],
+          ),
         ),
       ),
 
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.check),
+        child: Icon(Icons.done_outline_sharp),
         onPressed: (){
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Results(
             correct: _correct,
@@ -120,6 +142,54 @@ class _PlayQuizState extends State<PlayQuiz> {
     );
   }
 }
+
+class InfoHeader extends StatefulWidget {
+
+  final int length;
+
+  InfoHeader({@required this.length});
+
+  @override
+  _InfoHeaderState createState() => _InfoHeaderState();
+}
+
+class _InfoHeaderState extends State<InfoHeader> {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+        stream: infoStream,
+        builder: (context, snapshot){
+          return snapshot.hasData ? Container(
+            height: 40,
+            margin: EdgeInsets.only(left: 14),
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              shrinkWrap: true,
+              children: <Widget>[
+                NumberOfQuestionTile(
+                  text: "Total",
+                  number: widget.length,
+                ),
+                NumberOfQuestionTile(
+                  text: "Correct",
+                  number: _correct,
+                ),
+                NumberOfQuestionTile(
+                  text: "Incorrect",
+                  number: _incorrect,
+                ),
+                NumberOfQuestionTile(
+                  text: "NotAttempted",
+                  number: _notAttempted,
+                ),
+              ],
+            ),
+          ) : Container();
+        }
+    );
+  }
+}
+
 
 class QuizPlayTile extends StatefulWidget {
 

@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quiz_maker_app/services/database.dart';
+import 'package:flutter_quiz_maker_app/views/edit_quiz.dart';
 import 'package:flutter_quiz_maker_app/widgets/widgets.dart';
-import 'package:random_string/random_string.dart';
 
-class AddQuestion extends StatefulWidget {
+class EditQuestion extends StatefulWidget {
 
-  final String quizId;
-  AddQuestion(this.quizId);
+  final String quizId, questionId;
+  EditQuestion(this.quizId, this.questionId);
 
   @override
-  _AddQuestionState createState() => _AddQuestionState();
+  _EditQuestionState createState() => _EditQuestionState();
 }
 
-class _AddQuestionState extends State<AddQuestion> {
+class _EditQuestionState extends State<EditQuestion> {
 
   final _formKey = GlobalKey<FormState>();
   String question, option1, option2, option3, option4, correctAnswer, questionId;
@@ -21,14 +21,12 @@ class _AddQuestionState extends State<AddQuestion> {
 
   DatabaseService _databaseService = new DatabaseService();
 
-  _uploadQuestionData() async{
+  _updateQuestionData() async{
     if(_formKey.currentState.validate()){
 
       setState(() {
         _isLoading = true;
       });
-
-      questionId = randomAlphaNumeric(16);
 
       Map<String, String> questionData = {
         "question" : question,
@@ -37,12 +35,13 @@ class _AddQuestionState extends State<AddQuestion> {
         "option3" : option3,
         "option4" : option4,
         "correctAnswer" : correctAnswer,
-        "questionId" : questionId
+        "questionId" : widget.questionId
       };
 
-      await _databaseService.addQuestionData(questionData, widget.quizId, questionId).then((value) => {
+      await _databaseService.updateQuestionData(questionData, widget.quizId, widget.questionId).then((value) => {
         setState(() {
           _isLoading = false;
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => EditQuiz(widget.quizId)));
         })
       });
     }
@@ -143,21 +142,21 @@ class _AddQuestionState extends State<AddQuestion> {
               Spacer(),
 
               Row(
-                children: [
-                  GestureDetector(
-                      onTap: (){
-                        Navigator.pop(context);
-                      },
-                      child: orangeButton(context, "Submit", MediaQuery.of(context).size.width/2 - 36, Colors.deepOrangeAccent)
-                  ),
-                  SizedBox(width: 24,),
-                  GestureDetector(
-                      onTap: (){
-                        _uploadQuestionData();
-                      },
-                      child: orangeButton(context, "Add Question", MediaQuery.of(context).size.width/2 - 36, Colors.blueAccent)
-                  ),
-                ]
+                  children: [
+                    GestureDetector(
+                        onTap: (){
+                          Navigator.pop(context);
+                        },
+                        child: orangeButton(context, "Back", MediaQuery.of(context).size.width/2 - 36, Colors.deepOrangeAccent)
+                    ),
+                    SizedBox(width: 24,),
+                    GestureDetector(
+                        onTap: (){
+                          _updateQuestionData();
+                        },
+                        child: orangeButton(context, "Update Question", MediaQuery.of(context).size.width/2 - 36, Colors.blueAccent)
+                    ),
+                  ]
               ),
               SizedBox(height: 40.0)
             ],

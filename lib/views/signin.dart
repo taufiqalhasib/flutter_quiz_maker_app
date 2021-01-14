@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quiz_maker_app/helper/functions.dart';
 import 'package:flutter_quiz_maker_app/services/auth.dart';
+import 'package:flutter_quiz_maker_app/services/database.dart';
 import 'package:flutter_quiz_maker_app/views/home.dart';
 import 'package:flutter_quiz_maker_app/views/signup.dart';
 import 'package:flutter_quiz_maker_app/widgets/widgets.dart';
@@ -32,10 +34,12 @@ class _SignInState extends State<SignIn> {
           setState(() {
             _isLoading = false;
           });
+
           HelperFunctions.saveUserLoggedInDetails(isLoggedIn: true);
           Navigator.pushReplacement(context, MaterialPageRoute(
               builder: (context) => Home())
           );
+
         }
       });
 
