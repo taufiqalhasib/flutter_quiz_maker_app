@@ -19,7 +19,7 @@ This is a quiz maker Application. Admin will add quiz test, after that user will
 2. Add Set of Quiz Test
 3. Add Questions
 4. Quiz test with instant result
-5. Esit quiz test and questions
+5. Edit quiz test and questions
 
 ## Generate Output Files
 1. For Android - https://flutter.dev/docs/deployment/android
